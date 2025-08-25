@@ -26,38 +26,43 @@ const LandingPage: React.FC = () => {
     <div className="min-h-screen">
       {/* Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="font-bold text-xl text-blue-600">DevClimate</div>
-          <div className="flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+          <div className="font-bold text-lg sm:text-xl text-blue-600">DevClimate</div>
+          <div className="flex items-center gap-2 sm:gap-3">
             {!user ? (
               <>
                 <Link to="/login">
-                  <Button variant="ghost" size="sm" className="font-medium text-black hover:bg-gray-100">
+                  <Button variant="ghost" size="sm" className="font-medium text-black hover:bg-gray-100 text-xs sm:text-sm px-2 sm:px-3">
                     Sign In
                   </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button size="sm" className="bg-black hover:bg-gray-800 text-white font-medium">
+                  <Button size="sm" className="bg-black hover:bg-gray-800 text-white font-medium text-xs sm:text-sm px-2 sm:px-3">
                     Get Started
                   </Button>
                 </Link>
               </>
             ) : (
               <>
-                <Link to="/dashboard">
+                <Link to="/dashboard" className="hidden sm:block">
                   <Button variant="outline" size="sm" className="font-medium border-black text-black hover:bg-black hover:text-white">
                     Dashboard
                   </Button>
                 </Link>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">{user.username}</span>
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <span className="text-xs sm:text-sm font-medium hidden sm:inline">{user.username}</span>
+                  <Link to="/dashboard" className="sm:hidden">
+                    <Button variant="outline" size="sm" className="text-xs px-2">
+                      Dashboard
+                    </Button>
+                  </Link>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={logout}
-                    className="p-2"
+                    className="p-1 sm:p-2"
                   >
-                    <LogOut className="h-4 w-4" />
+                    <LogOut className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                 </div>
               </>
@@ -67,8 +72,8 @@ const LandingPage: React.FC = () => {
       </nav>
 
       {/* Search Section */}
-      <section className="pt-24 pb-6">
-        <div className="max-w-md mx-auto px-6">
+      <section className="pt-20 sm:pt-24 pb-4 sm:pb-6">
+        <div className="max-w-md mx-auto px-4 sm:px-6">
           <WeatherSearchBar />
         </div>
       </section>
@@ -79,16 +84,16 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* Features Section */}
-      <section className="pt-12 pb-20 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Why Choose DevClimate?</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+      <section className="pt-8 sm:pt-12 pb-16 sm:pb-20 bg-muted/30">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Why Choose DevClimate?</h2>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
               Get accurate, real-time weather data with powerful features designed for developers and weather enthusiasts.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
@@ -165,12 +170,12 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Weather Info Section */}
-      <section className="py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <section className="py-12 sm:py-16 lg:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-6">Comprehensive Weather Information</h2>
-              <p className="text-lg text-muted-foreground mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Comprehensive Weather Information</h2>
+              <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
                 Get detailed weather insights including temperature, humidity, wind speed, pressure, and more.
                 Our platform provides everything you need to stay informed about weather conditions.
               </p>
@@ -247,13 +252,13 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-lg mb-8 opacity-90">
+      <section className="py-12 sm:py-16 lg:py-20 bg-primary text-primary-foreground">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Ready to Get Started?</h2>
+          <p className="text-base sm:text-lg mb-6 sm:mb-8 opacity-90 px-4">
             Join thousands of users who trust DevClimate for accurate weather information.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
             {!user ? (
               <>
                 <Link to="/signup">

@@ -137,48 +137,49 @@ const WeatherDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Weather Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, {user?.username || 'User'}!</p>
+            <h1 className="text-2xl sm:text-3xl font-bold">Weather Dashboard</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">Welcome back, {user?.username || 'User'}!</p>
           </div>
-          <div className="flex items-center gap-3">
-            <Link to="/">
-              <Button variant="ghost" size="sm" className="font-medium text-black hover:bg-gray-100">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Home
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+            <Link to="/" className="flex-1 sm:flex-none">
+              <Button variant="ghost" size="sm" className="font-medium text-black hover:bg-gray-100 w-full sm:w-auto text-xs sm:text-sm">
+                <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Back to Home</span>
+                <span className="sm:hidden">Home</span>
               </Button>
             </Link>
-            <Button variant="outline" onClick={logout}>
+            <Button variant="outline" onClick={logout} size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
               Sign Out
             </Button>
           </div>
         </div>
 
         {/* Weather Search */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Search className="h-5 w-5" />
+        <Card className="mb-6 sm:mb-8">
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+              <Search className="h-4 w-4 sm:h-5 sm:w-5" />
               Search Weather
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm sm:text-base">
               Enter a city name to get current weather information
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Input
                 placeholder="Enter city name..."
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && searchWeather()}
-                className="flex-1"
+                className="flex-1 text-sm sm:text-base"
               />
-              <Button onClick={searchWeather} disabled={loading || !city.trim()}>
+              <Button onClick={searchWeather} disabled={loading || !city.trim()} className="w-full sm:w-auto text-sm sm:text-base">
                 {loading ? 'Searching...' : 'Search'}
               </Button>
             </div>
@@ -187,59 +188,62 @@ const WeatherDashboard: React.FC = () => {
 
         {/* Weather History */}
         <Card>
-          <CardHeader>
-            <CardTitle>Recent Searches</CardTitle>
-            <CardDescription>
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="text-lg sm:text-xl">Recent Searches</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Your weather search history
             </CardDescription>
           </CardHeader>
           <CardContent>
             {loading && searches.length === 0 ? (
-              <div className="text-center py-8">Loading...</div>
+              <div className="text-center py-6 sm:py-8 text-sm sm:text-base">Loading...</div>
             ) : searches.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-6 sm:py-8 text-muted-foreground text-sm sm:text-base">
                 No weather searches yet. Try searching for a city above!
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {searches.map((search) => (
                   <div
                     key={search._id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border rounded-lg gap-3 sm:gap-4"
                   >
-                    <div className="flex items-center gap-4">
-                      <Cloud className="h-8 w-8 text-blue-500" />
-                      <div>
-                        <h3 className="font-semibold">{search.city}</h3>
-                        <p className="text-sm text-muted-foreground">
+                    <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                      <Cloud className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-semibold text-sm sm:text-base truncate">{search.city}</h3>
+                        <p className="text-xs sm:text-sm text-muted-foreground">
                           {new Date(search.timestamp).toLocaleDateString()} at{' '}
-                          {new Date(search.timestamp).toLocaleTimeString()}
+                          {new Date(search.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-6">
-                      <div className="flex items-center gap-4 text-sm">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6">
+                      <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm flex-wrap">
                         <div className="flex items-center gap-1">
-                          <Thermometer className="h-4 w-4" />
-                          {search.temperature}°C
+                          <Thermometer className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span>{search.temperature}°C</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Droplets className="h-4 w-4" />
-                          {search.humidity}%
+                          <Droplets className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span>{search.humidity}%</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Wind className="h-4 w-4" />
-                          {search.windSpeed} km/h
+                          <Wind className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span>{search.windSpeed} km/h</span>
                         </div>
                       </div>
-                      <div className="text-sm font-medium">{search.description}</div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => deleteSearch(search._id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center justify-between w-full sm:w-auto gap-2">
+                        <div className="text-xs sm:text-sm font-medium truncate flex-1 sm:flex-none">{search.description}</div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteSearch(search._id)}
+                          className="p-1 sm:p-2 flex-shrink-0"
+                        >
+                          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -248,16 +252,17 @@ const WeatherDashboard: React.FC = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center gap-2 mt-6">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-2 mt-4 sm:mt-6">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => fetchWeatherSearches(currentPage - 1)}
                   disabled={currentPage === 1}
+                  className="w-full sm:w-auto text-xs sm:text-sm"
                 >
                   Previous
                 </Button>
-                <span className="flex items-center px-4 text-sm">
+                <span className="flex items-center px-2 sm:px-4 text-xs sm:text-sm order-first sm:order-none">
                   Page {currentPage} of {totalPages}
                 </span>
                 <Button
@@ -265,6 +270,7 @@ const WeatherDashboard: React.FC = () => {
                   size="sm"
                   onClick={() => fetchWeatherSearches(currentPage + 1)}
                   disabled={currentPage === totalPages}
+                  className="w-full sm:w-auto text-xs sm:text-sm"
                 >
                   Next
                 </Button>
