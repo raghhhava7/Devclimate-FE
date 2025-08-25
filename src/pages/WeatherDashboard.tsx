@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useAuth, useUser, SignOutButton } from '@clerk/clerk-react'
+import { useAuth } from '@/contexts/AuthContext'
 import { useSearchParams, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,8 +24,7 @@ interface WeatherResponse {
 }
 
 const WeatherDashboard: React.FC = () => {
-  const { getToken } = useAuth()
-  const { user } = useUser()
+  const { user, token, logout } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [searches, setSearches] = useState<WeatherData[]>([])
   const [loading, setLoading] = useState(false)
@@ -38,7 +37,6 @@ const WeatherDashboard: React.FC = () => {
   const fetchWeatherSearches = async (page = 1) => {
     try {
       setLoading(true)
-      const token = await getToken()
       const response = await fetch(`${API_BASE_URL}/weather?page=${page}&limit=5`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -68,7 +66,6 @@ const WeatherDashboard: React.FC = () => {
 
   const deleteSearch = async (searchId: string) => {
     try {
-      const token = await getToken()
       const response = await fetch(`${API_BASE_URL}/weather/${searchId}`, {
         method: 'DELETE',
         headers: {
@@ -118,7 +115,6 @@ const WeatherDashboard: React.FC = () => {
 
     try {
       setLoading(true)
-      const token = await getToken()
       const response = await fetch(`${API_BASE_URL}/weather/current/${encodeURIComponent(cityName.trim())}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -147,7 +143,7 @@ const WeatherDashboard: React.FC = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold">Weather Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, {user?.firstName || 'User'}!</p>
+            <p className="text-muted-foreground">Welcome back, {user?.username || 'User'}!</p>
           </div>
           <div className="flex items-center gap-3">
             <Link to="/">
@@ -156,9 +152,9 @@ const WeatherDashboard: React.FC = () => {
                 Back to Home
               </Button>
             </Link>
-            <SignOutButton>
-              <Button variant="outline">Sign Out</Button>
-            </SignOutButton>
+            <Button variant="outline" onClick={logout}>
+              Sign Out
+            </Button>
           </div>
         </div>
 

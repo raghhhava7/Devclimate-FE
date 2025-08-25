@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react'
+import { useAuth } from '@/contexts/AuthContext'
 import { Logo } from '@/components/logo'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ const menuItems = [
 export const HeroHeader = () => {
     const [menuState, setMenuState] = React.useState(false)
     const [isScrolled, setIsScrolled] = React.useState(false)
+    const { user, logout } = useAuth()
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -77,38 +78,50 @@ export const HeroHeader = () => {
                                 </ul>
                             </div>
                             <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                                <SignedOut>
-                                    <SignInButton mode="modal">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className={cn(isScrolled && 'lg:hidden')}>
-                                            <span>Login</span>
-                                        </Button>
-                                    </SignInButton>
-                                    <SignUpButton mode="modal">
-                                        <Button
-                                            size="sm"
-                                            className={cn(isScrolled && 'lg:hidden')}>
-                                            <span>Sign Up</span>
-                                        </Button>
-                                    </SignUpButton>
-                                    <SignUpButton mode="modal">
-                                        <Button
-                                            size="sm"
-                                            className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}>
-                                            <span>Get Started</span>
-                                        </Button>
-                                    </SignUpButton>
-                                </SignedOut>
-                                <SignedIn>
-                                    <Link to="/dashboard">
-                                        <Button variant="outline" size="sm">
-                                            Dashboard
-                                        </Button>
-                                    </Link>
-                                    <UserButton afterSignOutUrl="/" />
-                                </SignedIn>
+                                {!user ? (
+                                    <>
+                                        <Link to="/login">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className={cn(isScrolled && 'lg:hidden')}>
+                                                <span>Login</span>
+                                            </Button>
+                                        </Link>
+                                        <Link to="/signup">
+                                            <Button
+                                                size="sm"
+                                                className={cn(isScrolled && 'lg:hidden')}>
+                                                <span>Sign Up</span>
+                                            </Button>
+                                        </Link>
+                                        <Link to="/signup">
+                                            <Button
+                                                size="sm"
+                                                className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}>
+                                                <span>Get Started</span>
+                                            </Button>
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link to="/dashboard">
+                                            <Button variant="outline" size="sm">
+                                                Dashboard
+                                            </Button>
+                                        </Link>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm">{user.username}</span>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={logout}
+                                            >
+                                                Logout
+                                            </Button>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>

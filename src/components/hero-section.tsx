@@ -2,7 +2,7 @@ import { Cloud } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { TextEffect } from '@/components/ui/text-effect'
 import { AnimatedGroup } from '@/components/ui/animated-group'
-import { SignedIn, SignedOut, SignUpButton } from '@clerk/clerk-react'
+import { useAuth } from '@/contexts/AuthContext'
 import { Link } from 'react-router-dom'
 import { LogoCloud } from './logo-cloud'
 
@@ -27,6 +27,8 @@ const transitionVariants = {
 }
 
 export default function HeroSection() {
+    const { user } = useAuth()
+
     return (
         <main className="overflow-hidden [--color-primary-foreground:var(--color-white)] [--color-primary:var(--color-blue-600)]">
             <section>
@@ -63,22 +65,21 @@ export default function HeroSection() {
                             }}
                             className="mt-12">
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <SignedOut>
-                                    <SignUpButton mode="modal">
+                                {!user ? (
+                                    <Link to="/signup">
                                         <Button size="lg" className="flex items-center gap-2">
                                             <Cloud className="h-5 w-5" />
                                             Start Tracking Weather
                                         </Button>
-                                    </SignUpButton>
-                                </SignedOut>
-                                <SignedIn>
+                                    </Link>
+                                ) : (
                                     <Link to="/dashboard">
                                         <Button size="lg" className="flex items-center gap-2">
                                             <Cloud className="h-5 w-5" />
                                             Go to Dashboard
                                         </Button>
                                     </Link>
-                                </SignedIn>
+                                )}
                             </div>
 
                             <div

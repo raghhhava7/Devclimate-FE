@@ -1,13 +1,27 @@
 import React from 'react'
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Cloud, Thermometer, MapPin, History, Shield, Zap, Globe, Users } from 'lucide-react'
+import { Cloud, Thermometer, MapPin, History, Shield, Zap, Globe, Users, LogOut } from 'lucide-react'
 import HeroSection from '@/components/hero-section'
 import WeatherSearchBar from '@/components/WeatherSearchBar'
 
 const LandingPage: React.FC = () => {
+  const { user, logout, loading } = useAuth()
+
+  // Show loading state while auth initializes
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen">
       {/* Navigation Bar */}
@@ -15,32 +29,39 @@ const LandingPage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="font-bold text-xl text-blue-600">DevClimate</div>
           <div className="flex items-center gap-3">
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button variant="ghost" size="sm" className="font-medium text-black hover:bg-gray-100">
-                  Sign In
-                </Button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <Button size="sm" className="bg-black hover:bg-gray-800 text-white font-medium">
-                  Get Started
-                </Button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <Link to="/dashboard">
-                <Button variant="outline" size="sm" className="font-medium border-black text-black hover:bg-black hover:text-white">
-                  Dashboard
-                </Button>
-              </Link>
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: "w-8 h-8"
-                  }
-                }}
-              />
-            </SignedIn>
+            {!user ? (
+              <>
+                <Link to="/login">
+                  <Button variant="ghost" size="sm" className="font-medium text-black hover:bg-gray-100">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button size="sm" className="bg-black hover:bg-gray-800 text-white font-medium">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/dashboard">
+                  <Button variant="outline" size="sm" className="font-medium border-black text-black hover:bg-black hover:text-white">
+                    Dashboard
+                  </Button>
+                </Link>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium">{user.username}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={logout}
+                    className="p-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -233,25 +254,26 @@ const LandingPage: React.FC = () => {
             Join thousands of users who trust DevClimate for accurate weather information.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <SignedOut>
-              <SignUpButton mode="modal">
-                <Button size="lg" variant="secondary">
-                  Create Free Account
-                </Button>
-              </SignUpButton>
-              <SignInButton mode="modal">
-                <Button size="lg" variant="outline">
-                  Sign In
-                </Button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
+            {!user ? (
+              <>
+                <Link to="/signup">
+                  <Button size="lg" variant="secondary">
+                    Create Free Account
+                  </Button>
+                </Link>
+                <Link to="/login">
+                  <Button size="lg" variant="outline">
+                    Sign In
+                  </Button>
+                </Link>
+              </>
+            ) : (
               <Link to="/dashboard">
                 <Button size="lg" variant="secondary">
                   Go to Dashboard
                 </Button>
               </Link>
-            </SignedIn>
+            )}
           </div>
         </div>
       </section>
