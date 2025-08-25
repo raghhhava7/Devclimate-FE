@@ -32,12 +32,12 @@ const WeatherDashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
-  const API_BASE_URL = 'http://localhost:5000/api'
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
   const fetchWeatherSearches = async (page = 1) => {
     try {
       setLoading(true)
-      const response = await fetch(`${API_BASE_URL}/weather?page=${page}&limit=5`, {
+      const response = await fetch(`${API_BASE_URL}/api/weather?page=${page}&limit=5`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
