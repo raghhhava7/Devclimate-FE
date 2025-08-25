@@ -66,7 +66,7 @@ const WeatherDashboard: React.FC = () => {
 
   const deleteSearch = async (searchId: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/weather/${searchId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/weather/${searchId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -115,7 +115,7 @@ const WeatherDashboard: React.FC = () => {
 
     try {
       setLoading(true)
-      const response = await fetch(`${API_BASE_URL}/weather/current/${encodeURIComponent(cityName.trim())}`, {
+      const response = await fetch(`${API_BASE_URL}/api/weather/current/${encodeURIComponent(cityName.trim())}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
